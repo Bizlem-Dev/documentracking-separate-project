@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Document Tracking</title>
+
+<link href="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/plugins/sweetalert/css/sweetalert.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/css/style.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/css/custom.css" rel="stylesheet">
+
+<style type="text/css">
+        .active1{
+            background: #F3F1FA;
+        }
+        .active1 span{
+            color: #0E4B91;
+            font-weight: bold;
+        }
+        .nk-sidebar .metismenu > li.active1 a > i{
+            color: #0E4B91;
+        }
+        .nk-sidebar .metismenu > li a > i{
+            margin-top: -4px;
+        }
+    </style>
+
+</head>
+<body class="body-section">
+
+<input type=hidden id="email" name="email"
+			value="<%=request.getRemoteUser()%>" /> <input type=hidden
+			id="contactsallfields" name="contactsallfields" />
+
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="index.html">
+                    <b class="logo-abbr"><h2 style="color: #0E4B91 !important;"></h2></b>
+                    <span class="logo-compact"><h2 style="color: #0E4B91 !important;"></h2></span>
+                    <span class="brand-title">
+                        <h4 style="color: #0E4B91 !important;margin-top:5px;"></h4>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="header">    
+            <div class="header-content clearfix">
+                <div class="nav-control">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <div class="hamburger">
+                                <span class="toggle-icon"><i class="icon-menu"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 hed-title">
+                            <p>DocumentTracker</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-left">
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="/portal/apps/DocumentTrackingCSSAndJs/images/1.jpg" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void()"><i class="icon-user"></i> <span>Profile</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill gradient-1">3</div>
+                                            </a>
+                                        </li>
+                                        <hr class="my-2">
+                                        <li>
+                                            <a href="javascript:void()"><i class="icon-lock"></i> <span>Lock Screen</span></a>
+                                        </li>
+                                        <li><a href="javascript:void()"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-sidebar">           
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="active1">
+                        <a href="#Document" class="active1" data-toggle="tab">
+                            <i class="fa fa-file menu-icon"></i><span class="nav-text">Document</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#Api" data-toggle="tab">
+                            <span class="nav-text">API</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <div class="container-fluid mt-3">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tab-content">
+                            <div id="Document" class="tab-pane active">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="card-title">
+                                                    <h4>All Document</h4>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                             <div class="col-md-3">
+                                             <select class="form-control working-group-DropdownClass" id="working-group-Dropdown-idDrop">
+                                            
+                                             </select>
+                                             </div>
+                                            
+                                            <div class="col-md-1 text-right">
+                                                <button type="button" class="btn btn-primary btn-sm removeData" data-toggle="modal" data-target="#myModal">Upload</button>
+                                                <!-- <a href="" class="btn btn-success btn-sm text-white">DOCUMENT SET</a> -->
+                                           
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Last Open</th>
+                                                        <th>Total Visit</th>
+                                                        <th>Avg. time</th>
+                                                        <th>Owner</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="documentTrackInId">
+                                                
+                                                    <!-- <tr>
+                                                        <td>Sample Spot Report(1..</td>
+                                                        <td>-</td>
+                                                        <td>0</td>
+                                                        <td>00:00:00</td>
+                                                        <td>Vinay Sawant</td>
+                                                        <td class="action">
+                                                            <a class="icon-a"><i class="fa fa-link link" aria-hidden="true"></i></a>
+                                                            <div class="dropdown">
+                                                                <a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown">
+                                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="javascript:void()"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li>
+                                                                    <li><a href="javascript:void()" class="sweet-success-cancel"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr> -->
+                                                    
+                                                    <!-- <tr>
+                                                        <td>Sample Spot Report(1..</td>
+                                                        <td>-</td>
+                                                        <td>0</td>
+                                                        <td>00:00:00</td>
+                                                        <td>Vinay Sawant</td>
+                                                        <td class="action">
+                                                            <a class="icon-a"><i class="fa fa-link link" aria-hidden="true"></i></a>
+                                                            <div class="dropdown">
+                                                                <a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown">
+                                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="javascript:void()"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li>
+                                                                    <li><a href="javascript:void()" class="sweet-success-cancel"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sample Spot Report(1..</td>
+                                                        <td>-</td>
+                                                        <td>0</td>
+                                                        <td>00:00:00</td>
+                                                        <td>Vinay Sawant</td>
+                                                        <td class="action">
+                                                            <a class="icon-a"><i class="fa fa-link link" aria-hidden="true"></i></a>
+                                                            <div class="dropdown">
+                                                                <a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown">
+                                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="javascript:void()"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li>
+                                                                    <li><a href="javascript:void()" class="sweet-success-cancel"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sample Spot Report(1..</td>
+                                                        <td>-</td>
+                                                        <td>0</td>
+                                                        <td>00:00:00</td>
+                                                        <td>Vinay Sawant</td>
+                                                        <td class="action">
+                                                            <a class="icon-a"><i class="fa fa-link link" aria-hidden="true"></i></a>
+                                                            <div class="dropdown">
+                                                                <a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown">
+                                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="javascript:void()"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li>
+                                                                    <li><a href="javascript:void()" class="sweet-success-cancel"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr> -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div id="Api" class="tab-pane">
+                                Api
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="left-section-div" style="display: none;">
+            <div class="row">
+                <div class="col-md-12 hedding">
+                    <h2>Create Document Link</h2>
+                    <i><a><i class="fa fa-close close-sidebar"></i></a></i>
+                </div>
+            </div>
+            <div class="row content">
+                <div class="col-md-12">
+                    <input type="text" name="" class="form-control" placeholder="Recipient email address">
+                </div>
+                <div class="col-md-12">
+                    <input type="text" name="" class="form-control" placeholder="Company">
+                </div>
+                <div class="col-md-12" style="margin-top:20px;">
+                    <strong class="option-text">Options</strong>
+                </div>
+                <div class="col-md-12">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label">Send an email to recipient</label>
+                </div>
+                <div class="col-md-12">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label">Email me when viwed</label>
+                </div>
+                <div class="col-md-12">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label">Forward tracking</label>
+                </div>
+                <div class="col-md-12">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label">Set expiration date</label>
+                </div>
+                <div class="col-md-12">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label">Alert if not viewed for daya</label>
+                </div>
+            </div>
+            <div class="row footer-sidebox">
+                <div class="col-md-12 text-right">
+                    <a class="btn btn-danger btn-sm close-side text-white">CLOSE</a>
+                    <a class="btn btn-primary btn-sm text-white">CREATE LINK</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+          <div class="modal fade upload-image" id="myModal" role="dialog">
+            <div class="modal-dialog">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close closeRemoveData" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Upload a document</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-5 offset-md-3 upload-img-box text-center">
+                       <!--  <p><i>(pdf,ppt,pptx,doc and docx files only.)</i></p> -->
+                        <div class="file btn btn-success text-white">
+                            Choose Document
+                            <input type="file" name="file" id="fileUploadDocuments"/>
+                        </div>
+                        
+                        <br>
+                        <br>
+                        <p id="filenameId"></p>
+                         <p id="successUploadFileId"></p>
+                        
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright &copy; 2019</p>
+            </div>
+        </div>
+
+    </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/plugins/common/common.min.js"></script>
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/styleSwitcher.js"></script>
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/settings.js"></script>
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/gleek.js"></script>
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/custom.min.js"></script>
+<script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/logicData.js"></script>
+
+
+<script type="text/javascript">
+        $(document).ready(function(){
+            $('.metismenu li a').click(function(){
+                $('.metismenu li').removeClass('active1');
+                $('.metismenu li a').removeClass('active1');
+                $(this).addClass('active1');
+                $(this).parent('li').addClass('active1');
+            });
+        });
+
+    </script>
+
+    
+    </body>
+</html>
