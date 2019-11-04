@@ -9,7 +9,7 @@ public class InetAddressClass {
 
 		// The URL for which IP address needs to be fetched 
 //        String s = "https://uk.bluealgo.com"; // get domain to ip
-		 String s = "http://bluealgo.com"; // get domain to ip
+		 String s = "http://mail.bizlem.com"; // get domain to ip
   
         try { 
             // Fetch IP address by getByName() 

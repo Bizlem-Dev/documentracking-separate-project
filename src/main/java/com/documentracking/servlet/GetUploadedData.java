@@ -33,7 +33,22 @@ import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.jcr.api.SlingRepository;
 
+import com.documenttracking.classonly.BypassSSlCertificate;
 import com.documenttracking.classonly.GetAllMethodsHere;
+
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.net.URLConnection;
+ 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+
 
 @SuppressWarnings("serial")
 @Component(immediate = true, metatype = false)
@@ -658,7 +673,9 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 		StringBuffer response = null;
 		try {
 
-			URL obj = new URL("http://uk.bluealgo.com:8087/apirest/doctojpeg/postpdfprevTrackApi");
+			BypassSSlCertificate.ignoreHttps("http://bluealgo.com:8087/apirest/doctojpeg/postpdfprevTrackApi");
+			
+			URL obj = new URL("http://bluealgo.com:8087/apirest/doctojpeg/postpdfprevTrackApi");
 			HttpURLConnection postConnection = (HttpURLConnection) obj.openConnection();
 			postConnection.setRequestMethod("POST");
 			postConnection.setRequestProperty("Content-Type", "application/json");
@@ -710,7 +727,9 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 		StringBuffer response = null;
 		
 		try {
-			URL obj = new URL("http://uk.bluealgo.com:8087/apirest/doctojpeg/pretimepdfTrackApi");
+			BypassSSlCertificate.ignoreHttps("http://bluealgo.com:8087/apirest/doctojpeg/pretimepdfTrackApi");
+			
+			URL obj = new URL("http://bluealgo.com:8087/apirest/doctojpeg/pretimepdfTrackApi");
 			HttpURLConnection postConnection = (HttpURLConnection) obj.openConnection();
 			postConnection.setRequestMethod("POST");
 			postConnection.setRequestProperty("Content-Type", "application/json");

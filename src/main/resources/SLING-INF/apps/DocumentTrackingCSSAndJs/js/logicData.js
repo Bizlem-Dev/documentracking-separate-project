@@ -4,6 +4,9 @@ var Email= document.getElementById("email").value;
  $(function() {
 	 getGroupName('working-group-DropdownClass');
 	 getTrackedData();
+	 
+	 $( "#datepicker" ).datepicker();
+	 
     });
  
  var group;
@@ -236,7 +239,7 @@ var Email= document.getElementById("email").value;
 								
 							} //documentUploadedDate check
 							
-							bodyDoc=bodyDoc+'<tr><td>'+documentName+'</td><td>'+lastViewsByDocument+'</td><td>'+noOfViewsDocument+'</td><td>'+documentUploadedDate+'</td><td>'+owner+'</td><td class="action"><a class="icon-a"><i class="fa fa-link link" aria-hidden="true"></i></a><div class="dropdown"><a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a><ul class="dropdown-menu"><li><a href="javascript:void(0)" class="copyLinkData" onclick="copyToClipBoard(this)" id="copyLinkData'+i+'" file-url="'+fileUrl+'"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li><li><a href="javascript:void(0)" class="sweet-success-cancel deleteFilenameNode" onclick="deleteDocumentNameNode(this)" id="deleteFilenameNode'+i+'" file-name="'+documentName+'"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li></ul></div></td></tr>';
+							bodyDoc=bodyDoc+'<tr><td>'+documentName+'</td><td>'+lastViewsByDocument+'</td><td>'+noOfViewsDocument+'</td><td>'+documentUploadedDate+'</td><td>'+owner+'</td><td class="action"><a class="icon-a" onclick="onclickleftslide();"><i class="fa fa-link link" aria-hidden="true"></i></a><div class="dropdown"><a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a><ul class="dropdown-menu"><li><a href="javascript:void(0)" class="copyLinkData" onclick="copyToClipBoard(this)" id="copyLinkData'+i+'" file-url="'+fileUrl+'"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li><li><a href="javascript:void(0)" class="sweet-success-cancel deleteFilenameNode" onclick="deleteDocumentNameNode(this)" id="deleteFilenameNode'+i+'" file-name="'+documentName+'"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li></ul></div></td></tr>';
 							
 						} // for close
 						
@@ -344,6 +347,24 @@ var Email= document.getElementById("email").value;
 	 document.getElementById("filenameId").innerHTML="";
 	 document.getElementById("successUploadFileId").innerHTML ="";
 	});
+ 
+ 
+ function onclickleftslide(){
+	 $(".left-section-div").show();
+ }
+ 
+ function setAlertAnyOneIfNeeded(){
+	
+	 $(".left-section-div").find("label").each(function(){
+		  console.log("data: "+$(this).html());
+		  });
+	 
+	 
+	 /*var checkBox = document.getElementById("");
+	 if(checkBox.checked){
+		 
+	 }*/
+ }
  
  /*$(".sweet-success-cancel").click(function(e){
      var obj = $(this);

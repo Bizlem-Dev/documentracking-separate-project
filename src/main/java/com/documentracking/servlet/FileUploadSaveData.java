@@ -141,7 +141,7 @@ public class FileUploadSaveData extends SlingAllMethodsServlet {
 	    						   jcrNode.setProperty("jcr:mimeType","application/octet-stream");
 	    						   
 	    						   //fileNameNode.setProperty("fileUrl",request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()+ fileNameNode.getPath()+"/"+subfileNode.getName());
-	    						  String url =   "http://" + request.getServerName() + ":8082"
+	    						  String url =   "https://" + request.getServerName() + ":8083"
 											 + request.getContextPath()
 											+ DocumentTracking.getPath()+"/"+nodeNameString+"/" + filenameNodeSling;
 	    						  fileNameNode.setProperty("fileUrl",url);

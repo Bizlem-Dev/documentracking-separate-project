@@ -12,6 +12,9 @@
 <link href="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/css/style.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/css/custom.css" rel="stylesheet">
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
 <style type="text/css">
         .active1{
             background: #F3F1FA;
@@ -289,13 +292,17 @@
                     </label>
                     <label class="checkbox-label">Forward tracking</label>
                 </div>
+                
                 <div class="col-md-12">
-                    <label class="switch">
+                    <label class="switch" id="date">
                         <input type="checkbox">
                         <span class="slider round"></span>
                     </label>
-                    <label class="checkbox-label">Set expiration date</label>
+                    <label class="checkbox-label" id="Set expiration date">Set expiration date</label>
+                    <p> click here: <input type="text" id="datepicker"></p>
                 </div>
+                
+                
                 <div class="col-md-12">
                     <label class="switch">
                         <input type="checkbox">
@@ -307,7 +314,7 @@
             <div class="row footer-sidebox">
                 <div class="col-md-12 text-right">
                     <a class="btn btn-danger btn-sm close-side text-white">CLOSE</a>
-                    <a class="btn btn-primary btn-sm text-white">CREATE LINK</a>
+                    <a class="btn btn-primary btn-sm text-white" onclick="setAlertAnyOneIfNeeded();">CREATE LINK</a>
                 </div>
             </div>
         </div>
@@ -364,6 +371,8 @@
 <script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/custom.min.js"></script>
 <script src="<%=request.getContextPath()%>/apps/DocumentTrackingCSSAndJs/js/logicData.js"></script>
 
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript">
         $(document).ready(function(){

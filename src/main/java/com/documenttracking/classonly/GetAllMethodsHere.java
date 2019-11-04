@@ -138,7 +138,9 @@ public class GetAllMethodsHere {
 			System.out.println("userid " + userid);
 			expireFlag = 1;
 		}
-		String addr = "http://uk.bluealgo.com:8087/apirest/trialmgmt/trialuser/" + userid + "/DocTigerFreeTrial";
+		
+		BypassSSlCertificate.ignoreHttps("http://bluealgo.com:8087/apirest/trialmgmt/trialuser/" + userid + "/DocTigerFreeTrial");
+		String addr = "http://bluealgo.com:8087/apirest/trialmgmt/trialuser/" + userid + "/DocTigerFreeTrial";
 		
 		try {
 			URL url = new URL(addr);
