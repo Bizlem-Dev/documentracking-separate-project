@@ -5,7 +5,23 @@ var Email= document.getElementById("email").value;
 	 getGroupName('working-group-DropdownClass');
 	 getTrackedData();
 	 
-	 $( "#datepicker" ).datepicker();
+//	 $( "#datepicker" ).datepicker();
+	 
+	 $( "#datepicker" ).datepicker({
+	      showOn: "button",
+	      buttonImage: "/portal/apps/DocumentTrackingCSSAndJs/images/tenor.gif",
+	      buttonImageOnly: true,
+	      buttonText: "Select date"
+	   });
+	 
+	 /*var includeData=location.href;
+	 if( includeData.includes('/content/services/') ){
+		 hitUrlMove(includeData);
+		 
+	 }*/
+	 
+	 
+	 
 	 
     });
  
@@ -201,6 +217,8 @@ var Email= document.getElementById("email").value;
 							var lastViewsByDocument="";
 							var uniqueView="";
 							var owner="";
+							var nodeName="";
+							var urlTemp="";
 							
 							if(insidejSonObj.hasOwnProperty("documentName")){
 								documentName=insidejSonObj.documentName;
@@ -216,10 +234,14 @@ var Email= document.getElementById("email").value;
 								uniqueView=insidejSonObj.uniqueView;
 							}
 							
-							if(insidejSonObj.hasOwnProperty("fileUrl")){
+							if(insidejSonObj.hasOwnProperty("fileUrl")){   
 								fileUrl=insidejSonObj.fileUrl;
 							}if(insidejSonObj.hasOwnProperty("owner")){
 								owner=insidejSonObj.owner;
+							}if(insidejSonObj.hasOwnProperty("nodeName")){
+								nodeName=insidejSonObj.nodeName;
+							}if(insidejSonObj.hasOwnProperty("urlTemp")){
+								urlTemp=insidejSonObj.urlTemp;
 							}
 							
 							if(insidejSonObj.hasOwnProperty("documentUploadedDate")){
@@ -239,7 +261,8 @@ var Email= document.getElementById("email").value;
 								
 							} //documentUploadedDate check
 							
-							bodyDoc=bodyDoc+'<tr><td>'+documentName+'</td><td>'+lastViewsByDocument+'</td><td>'+noOfViewsDocument+'</td><td>'+documentUploadedDate+'</td><td>'+owner+'</td><td class="action"><a class="icon-a" onclick="onclickleftslide();"><i class="fa fa-link link" aria-hidden="true"></i></a><div class="dropdown"><a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a><ul class="dropdown-menu"><li><a href="javascript:void(0)" class="copyLinkData" onclick="copyToClipBoard(this)" id="copyLinkData'+i+'" file-url="'+fileUrl+'"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li><li><a href="javascript:void(0)" class="sweet-success-cancel deleteFilenameNode" onclick="deleteDocumentNameNode(this)" id="deleteFilenameNode'+i+'" file-name="'+documentName+'"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li></ul></div></td></tr>';
+							bodyDoc=bodyDoc+'<tr><td>'+documentName+'</td><td>'+lastViewsByDocument+'</td><td>'+noOfViewsDocument+'</td><td>'+documentUploadedDate+'</td><td>'+owner+'</td><td class="action"><a class="icon-a" onclick="onclickleftslide(this);" nodeName="'+nodeName+'"><i class="fa fa-link link" aria-hidden="true"></i></a><div class="dropdown"><a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a><ul class="dropdown-menu"><li><a href="javascript:void(0)" class="copyLinkData" onclick="copyToClipBoard(this)" id="copyLinkData'+i+'" file-url="'+urlTemp+'"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li><li><a href="javascript:void(0)" class="sweet-success-cancel deleteFilenameNode" onclick="deleteDocumentNameNode(this)" id="deleteFilenameNode'+i+'" file-name="'+documentName+'"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li></ul></div></td></tr>';
+//							bodyDoc=bodyDoc+'<tr><td>'+documentName+'</td><td>'+lastViewsByDocument+'</td><td>'+noOfViewsDocument+'</td><td>'+documentUploadedDate+'</td><td>'+owner+'</td><td class="action"><a class="icon-a" onclick="onclickleftslide(this);" nodeName="'+nodeName+'"><i class="fa fa-link link" aria-hidden="true"></i></a><div class="dropdown"><a class="icon-a drop-box dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a><ul class="dropdown-menu"><li><a href="javascript:void(0)" class="copyLinkData" onclick="copyToClipBoard(this)" id="copyLinkData'+i+'" file-url="'+fileUrl+'"><i class="fa fa-clone" aria-hidden="true"></i> Copy to clipboard</a></li><li><a href="javascript:void(0)" class="sweet-success-cancel deleteFilenameNode" onclick="deleteDocumentNameNode(this)" id="deleteFilenameNode'+i+'" file-name="'+documentName+'"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></li></ul></div></td></tr>';
 							
 						} // for close
 						
@@ -258,8 +281,6 @@ var Email= document.getElementById("email").value;
 					document.getElementById('documentTrackInId').innerHTML='<p align="center">No Data Available</p>';
 				}
 			} // success function close
-			
-			
 
 		}); // function on click
 	 
@@ -349,22 +370,88 @@ var Email= document.getElementById("email").value;
 	});
  
  
- function onclickleftslide(){
+ function onclickleftslide(param){
 	 $(".left-section-div").show();
+	 
+	 var $this = $(param);
+	 var nodeName = $this.attr("nodeName");
+	 console.log("nodeNameoutside: "+nodeName);
+	 
+	 $(".create-link").click(function(){
+		 setAlertAnyOptionIfNeeded(param);
+	 });
+	 
  }
  
- function setAlertAnyOneIfNeeded(){
+ function setAlertAnyOptionIfNeeded(param){
 	
-	 $(".left-section-div").find("label").each(function(){
-		  console.log("data: "+$(this).html());
-		  });
+	 var $this = $(param);
+	 var nodeName = $this.attr("nodeName");
+	 console.log("nodeNameinside: "+nodeName);
 	 
+	 var jsonData={};
+	 jsonData.Email=Email;
+	 jsonData.group=group;
+	 jsonData.nodeName=nodeName;
 	 
-	 /*var checkBox = document.getElementById("");
-	 if(checkBox.checked){
+	 var SED = document.getElementById("SED");
+	 if(SED.checked){
 		 
-	 }*/
+		 $("#datepick").show();
+		 
+		 var datepicker = document.getElementById("datepicker");
+		 console.log("datepicker: "+datepicker.value);
+		 
+		 jsonData.expiryDate="expiryDate";
+		 jsonData.date=datepicker.value;
+		 
+		 checkData(jsonData);
+		 
+	 }else{
+		 
+		 var SU = document.getElementById("SU");
+		 if(SU.checked){
+			 
+			 console.log("SU: "+"Checked");
+			 jsonData.singleUse="singleUse";
+			 checkData(jsonData);
+			 
+		 }else{
+			 $("#datepick").hide();
+		 }
+		 
+	 }
+	 
+	
  }
+ 
+ $("#SED").click(function(){
+	 var SED = document.getElementById("SED");
+	 if(SED.checked){
+		 $("#datepick").show();
+	 }else{
+		 $("#datepick").hide();
+	 }
+	});
+ 
+ function checkData(jsonData){
+	 
+	 $.ajax({
+		
+		 type: "POST",
+	        url: "/portal/servlet/service/CheckExpiryAndSingleUseSaveData",
+	        async: false,
+	        data:JSON.stringify(jsonData),
+	        contentType: "application/json",
+	        success: function (data) {
+	        	console.log("data: "+data);
+	        }
+		 
+	 });
+	 
+ }
+ 
+ 
  
  /*$(".sweet-success-cancel").click(function(e){
      var obj = $(this);

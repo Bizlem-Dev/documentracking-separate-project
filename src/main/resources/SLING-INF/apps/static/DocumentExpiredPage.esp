@@ -1,0 +1,58 @@
+<html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<title>Page not found</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+<script async="" src="https://negbar.ad-blocker.org/chrome/adblocker-chromeglobalinjectjs.js"></script>
+
+<style type="text/css">
+
+.body-class-404-500 {
+    color: #000;
+    background-color: rgba(0,0,0,.1);
+}
+
+body {
+    font-family: roboto,sans-serif;
+}
+body, html {
+    padding: 0;
+    margin: 0;
+}
+.message-container {
+    min-width: 300px;
+    margin: 50px auto;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.h1-page {
+    font-size: 138px;
+    line-height: 188px;
+    margin: 0;
+    padding: 0;
+}
+.home-button {
+    cursor: pointer;
+    background-color: #00a36a;
+    color: #fff;
+    border: 0;
+    font-weight: 700;
+    padding: 10px;
+}
+
+</style>
+
+</head>
+<body class="body-class-404-500">
+<div class="message-container">
+<!-- <a href="https://www.saleshandy.com/"><img src="https://d2exwq1xp3irb6.cloudfront.net/prod-images/saleshandy-black-optimized.png" alt="SalesHandy"></a> -->
+<h1 class="h1-page">404</h1>
+The file is expired. You need a new one.
+<br><br>
+<a href="https://bluealgo.com:8083/portal/servlet/service/DocumentTracking/"><button class="home-button">Go Home</button></a>
+</div>
+
+</body></html>

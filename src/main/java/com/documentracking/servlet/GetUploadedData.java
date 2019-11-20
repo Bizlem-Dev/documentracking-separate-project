@@ -35,6 +35,7 @@ import org.apache.sling.jcr.api.SlingRepository;
 
 import com.documenttracking.classonly.BypassSSlCertificate;
 import com.documenttracking.classonly.GetAllMethodsHere;
+import com.sun.mail.iap.Response;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -116,7 +117,8 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 												String fileUrl="";
 												String filenameplusextension="";
 												
-
+													getPropertyObj.put("nodeName", nextNodeOfTemplateInside.getPath());
+												
 												if (nextNodeOfTemplateInside.hasProperty("documentName")) {
 													documentName = nextNodeOfTemplateInside.getProperty("documentName")
 															.getString();
@@ -149,6 +151,11 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 												}if (nextNodeOfTemplateInside.hasProperty("fileUrl")) {
 													fileUrl = nextNodeOfTemplateInside.getProperty("fileUrl")
 															.getString();
+													
+//													String urlTemp=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+"/portal/servlet/service/DocumentNameData?email="+email+"&group="+group+"&file="+nextNodeOfTemplateInside.getName().toString();
+													String urlTemp=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+"/portal/servlet/service/PdfJs?email="+email+"&group="+group+"&file="+nextNodeOfTemplateInside.getName().toString();
+													
+													getPropertyObj.put("urlTemp", urlTemp);
 													getPropertyObj.put("fileUrl", fileUrl);
 												}
 
@@ -230,6 +237,8 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 														String fileUrl="";
 														String filenameplusextension="";
 
+														getPropertyObj.put("nodeName", nextNodeOfTemplateInside.getPath());
+														
 														if (nextNodeOfTemplateInside.hasProperty("documentName")) {
 															documentName = nextNodeOfTemplateInside.getProperty("documentName")
 																	.getString();
@@ -262,6 +271,11 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 														}if (nextNodeOfTemplateInside.hasProperty("fileUrl")) {
 															fileUrl = nextNodeOfTemplateInside.getProperty("fileUrl")
 																	.getString();
+															
+															//String urlTemp=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+"/portal/servlet/service/DocumentNameData?email="+email+"&group="+group+"&file="+nextNodeOfTemplateInside.getName().toString();
+															String urlTemp=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+"/portal/servlet/service/PdfJs?email="+email+"&group="+group+"&file="+nextNodeOfTemplateInside.getName().toString();
+															getPropertyObj.put("urlTemp", urlTemp);
+															
 															getPropertyObj.put("fileUrl", fileUrl);
 														}
  
@@ -274,7 +288,7 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 														// document tracking code start here
 														
 														JSONArray documentTrack=callScriptDocument(nextNodeOfTemplateInside, session, response, documentUploadedDate,documentName,filenameplusextension);
-														
+														//out.println(nextNodeOfTemplateInside+" ::  "+documentTrack);
 														if(documentTrack.length()!=0 && documentTrack!=null){
 															
 															getPropertyObj.put("documentStatus", "open");
@@ -327,8 +341,9 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 	
 	public JSONArray callScriptDocument(Node nextNodeOfTemplateInside, Session session, SlingHttpServletResponse rep, String GenerationDate,String documentName, String filenameplusextension){
 		JSONArray arrayPropObj=new JSONArray();
+		
 		try {
-			//PrintWriter out=rep.getWriter();
+			PrintWriter out=rep.getWriter();
 			if(!GetAllMethodsHere.isNullString(documentName)){
 				//out.println("documentNameapi: "+documentName);
 				JSONObject sendInputMohitApi = new JSONObject();
@@ -341,7 +356,7 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 					if(nextNodeOfTemplateInside.hasProperty("documentArray")){
 					   String docArrayStr=nextNodeOfTemplateInside.getProperty("documentArray").getString();
 					    docArrayObj=new JSONArray(docArrayStr);
-					 
+					// out.println("docArrayObj: "+docArrayObj);
 					}
 					String afterData="";
 					if(lastSyncDate.lastIndexOf(".")!=-1){
@@ -365,24 +380,29 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 											sendInputMohitApi.put("logfilename","localhost_access_log."+lastSyncDate + ".txt");
 											sendInputMohitApi.put("timestamp",afterData);
 											String syncResponse=getRemainingDocumentTimeResponse(sendInputMohitApi.toString());
+//											out.println("syncResponse: "+syncResponse);
 											if ( !GetAllMethodsHere.isNullString(syncResponse) ) {
+												//out.println("insidenull: "+syncResponse);
 												
 												JSONObject resonseObj = new JSONObject(syncResponse);
 												if (resonseObj.length() != 0 && resonseObj != null) {
-													
+													//out.println("resonseObj: "+resonseObj);
 													String status = "";
 													String hostname="";
 													String dateTime="";
 													
 													JSONObject responseStrObj = new JSONObject(resonseObj.getString("outputdata"));
 													if (responseStrObj.length() != 0 && responseStrObj != null) {
-														
+													//	out.println("responseStrObj: "+responseStrObj);
 													
 														if (responseStrObj.has("status")) {
 															status = responseStrObj.getString("status");
+															//out.println("status: "+status);
+															
 														}
 														if (responseStrObj.has("hostname")) {
 															 hostname = responseStrObj.getString("hostname");
+															// out.println("hostname: "+hostname);
 														}
 														
 														if (responseStrObj.has("dateTime")) {
@@ -404,24 +424,49 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 															
 														} else {
 															if (status.equals("open")) {
-
-																String hostSplit[] = hostname.split("#");
-																String dateTimeSplit[] = dateTime.split("#");
 																
+																String[] hostSplit = null;
+																String dateTimeSplit[]=null;
 																
-																
-																for(int j=0;j<hostSplit.length;j++){
-																	String ip=hostSplit[j];
-																	
-																	String date=dateTimeSplit[j];
-																	
-																	JSONObject ipdateObj=new JSONObject();
-																	ipdateObj.put("ip",ip);
-																	ipdateObj.put("date",date);
-																	docArrayObj.put(ipdateObj);
-																	
+																if( hostname.indexOf("#")!=-1 ){
+																	hostSplit = hostname.split("#");
+																}
+																if( dateTime.indexOf("#")!=-1 ){
+																	dateTimeSplit = dateTime.split("#");
 																}
 																
+//																String hostSplit[] = hostname.split("#");
+																//String dateTimeSplit[] = dateTime.split("#");
+																
+																//out.println("dateTimeSplit: "+dateTimeSplit);
+																
+																if( hostSplit!=null ){
+																	for(int j=0;j<hostSplit.length;j++){
+																		JSONObject ipdateObj=new JSONObject();
+																		
+																		String ip=hostSplit[j];
+																		boolean bool=false;
+																		String date="";
+																		
+																		if(dateTimeSplit!=null){
+																		try {
+																			 date=dateTimeSplit[j];
+																			 bool=true;
+																	      } catch(Exception e) {
+																	    	  bool=false;
+																	      }
+																		}
+																		
+																		if( bool==true ){
+																			ipdateObj.put("date",date);
+																		}
+																		
+																		ipdateObj.put("ip",ip);
+																		docArrayObj.put(ipdateObj);
+																	}
+																}
+																
+																//out.println("docArrayObjforoutside: "+docArrayObj);
 																if(docArrayObj.length()>0){
 																nextNodeOfTemplateInside.setProperty("documentArray",docArrayObj.toString());
 																
@@ -431,11 +476,12 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 																session.save();
 																
 																String slingArrayStr=nextNodeOfTemplateInside.getProperty("documentArray").getString();
-																
+																//out.println("slingArrayStr: "+slingArrayStr);
 																if( !GetAllMethodsHere.isNullString(slingArrayStr) ){
+																	//out.println("slingArrayStrinside: "+slingArrayStr);
 																	JSONArray docArrayObjSling=new JSONArray(slingArrayStr);
 																	arrayPropObj=docArrayObjSling;
-																	// rep.getWriter().println("arrayPropObj_if: "+arrayPropObj);
+																	//rep.getWriter().println("arrayPropObj_if: "+arrayPropObj);
 																}
 																}
 																
@@ -503,7 +549,7 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 												} else {
 													if (status.equals("open")) {
 
-														String hostSplit[] = hostname.split("#");
+														/*String hostSplit[] = hostname.split("#");
 														String dateTimeSplit[] = dateTime.split("#");
 														
 														for(int j=0;j<hostSplit.length;j++){
@@ -515,7 +561,51 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 															ipdateObj.put("ip",ip);
 															ipdateObj.put("date",date);
 															arrayPropObj.put(ipdateObj);
+														}*/
+														
+														String[] hostSplit = null;
+														String dateTimeSplit[]=null;
+														
+														if( hostname.indexOf("#")!=-1 ){
+															hostSplit = hostname.split("#");
 														}
+														if( dateTime.indexOf("#")!=-1 ){
+															dateTimeSplit = dateTime.split("#");
+														}
+														
+//														String hostSplit[] = hostname.split("#");
+														//String dateTimeSplit[] = dateTime.split("#");
+														
+														//out.println("dateTimeSplit: "+dateTimeSplit);
+														
+														if( hostSplit!=null ){
+															for(int j=0;j<hostSplit.length;j++){
+																JSONObject ipdateObj=new JSONObject();
+																
+																String ip=hostSplit[j];
+																boolean bool=false;
+																String date="";
+																
+																if(dateTimeSplit!=null){
+																try {
+																	 date=dateTimeSplit[j];
+																	 bool=true;
+															      } catch(Exception e) {
+															    	  bool=false;
+															      }
+																}
+																
+																if( bool==true ){
+																	ipdateObj.put("date",date);
+																}
+																
+																ipdateObj.put("ip",ip);
+																docArrayObj.put(ipdateObj);
+																
+															}
+														}
+														
+														
 														if(arrayPropObj.length()>0){
 														nextNodeOfTemplateInside.setProperty("documentArray",arrayPropObj.toString());
 														
@@ -613,7 +703,7 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 													} else {
 														if (status.equals("open")) {
 
-															String hostSplit[] = hostname.split("#");
+															/*String hostSplit[] = hostname.split("#");
 															String dateTimeSplit[] = dateTime.split("#");
 															
 															
@@ -627,7 +717,50 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 																ipdateObj.put("ip",ip);
 																ipdateObj.put("date",date);
 																arrayPropObj.put(ipdateObj);
+															}*/
+															
+															String[] hostSplit = null;
+															String dateTimeSplit[]=null;
+															
+															if( hostname.indexOf("#")!=-1 ){
+																hostSplit = hostname.split("#");
 															}
+															if( dateTime.indexOf("#")!=-1 ){
+																dateTimeSplit = dateTime.split("#");
+															}
+															
+//															String hostSplit[] = hostname.split("#");
+															//String dateTimeSplit[] = dateTime.split("#");
+															
+															//out.println("dateTimeSplit: "+dateTimeSplit);
+															
+															if( hostSplit!=null ){
+																for(int j=0;j<hostSplit.length;j++){
+																	JSONObject ipdateObj=new JSONObject();
+																	
+																	String ip=hostSplit[j];
+																	boolean bool=false;
+																	String date="";
+																	
+																	if(dateTimeSplit!=null){
+																	try {
+																		 date=dateTimeSplit[j];
+																		 bool=true;
+																      } catch(Exception e) {
+																    	  bool=false;
+																      }
+																	}
+																	
+																	if( bool==true ){
+																		ipdateObj.put("date",date);
+																	}
+																	
+																	ipdateObj.put("ip",ip);
+																	arrayPropObj.put(ipdateObj);
+																	
+																}
+															}
+															
 															
 														} // status open check 
 													} // else
@@ -664,7 +797,14 @@ public class GetUploadedData extends SlingAllMethodsServlet {
 			
 			
 		} catch (Exception e) {
-			System.out.println("documentScriptCallCheck: "+e.getMessage());
+	      try {
+			PrintWriter out=rep.getWriter();
+			e.printStackTrace(out);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+			//System.out.println("documentScriptCallCheck: "+e.getMessage());
 		}
 		return arrayPropObj;
 	}

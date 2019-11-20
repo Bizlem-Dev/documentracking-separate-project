@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Document-Tracking</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="<%=request.getContextPath()%>/apps/PdfJs/pdf.js"></script>
+<script src="<%=request.getContextPath()%>/apps/PdfJs/pdf.worker.js"></script>
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+ <script src="<%=request.getContextPath()%>/apps/PdfJs/logicPdfJs.js"></script>
+
+<style type="text/css">
+
+.pdf-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: 45px;
+    background-color: #2a56c6;
+    z-index: 7780;
+}
+.pdf-header .logo {
+    float: left;
+    position: relative;
+    width: 50%;
+    height: 45px;
+    text-align: left;
+    padding-left: 20px;
+}
+.pdf-header .logo .document-name {
+    float: left;
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    line-height: 44px;
+    color: #fff;
+}
+
+.pdf-header .pdf-options {
+    float: right;
+    position: relative;
+    width: 50%;
+    height: 45px;
+    color: #fff;
+    text-align: right;
+    padding-right: 20px;
+}
+.pdf-header .pdf-options .opt {
+    float: right;
+    min-width: 30px;
+    height: 45px;
+    font-size: 22px;
+    line-height: 44px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.viewer {
+    background-color: rgba(0,0,0,.1);
+    padding-top: 50px;
+}
+
+body {
+    font-family: roboto,sans-serif;
+}
+
+.text-center{
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+}
+.symbolsbuttons{
+   float:right;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+#pdf-current-page {
+	display: inline;
+}
+
+#pdf-total-pages {
+	display: inline;
+}
+
+#the-canvas {
+	border: 1px solid rgba(0,0,0,0.2);
+	box-sizing: border-box;
+}
+
+
+.pdf-header {
+	display: none;
+}
+#maincontents {
+	display: none;
+}
+
+</style>
+
+   </head>
+   <body class="viewer">
+   
+   
+   <div class="pdf-header">
+<div class="logo">
+<div class="document-name" id="document-name"></div>
+</div>
+
+<div class="symbolsbuttons">
+<a class="btn btn-info btn-lg" id="zoominbutton" title="zoom in">
+          <span class="glyphicon glyphicon-plus"></span> 
+</a>
+ <a class="btn btn-info btn-lg" id="zoomoutbutton" title="zoom out">
+          <span class="glyphicon glyphicon-minus"></span> 
+</a>
+</div>
+
+</div>
+
+      <!-- <h1>Simple PDF.js with zoom</h1> -->
+
+      <!-- <button id="nextbutton" type="button">next page</button> -->
+      <!-- <button id="prevbutton" type="button">prev page</button> -->
+      <!-- <button id="zoominbutton" type="button">zoom in</button> -->
+      <!-- <button id="zoomoutbutton" type="button">zoom out</button> -->
+      <!-- <br> -->
+	  <!-- <br> -->
+	  
+	  <div class="text-center">
+	    <div id="page-loader">Loading page ...</div>
+	  </div>
+	  
+	  <div id="maincontents">
+<div class="text-center" id="nextprevId">
+    <div class="pagination">
+  <a id="prevbutton" href="#"><i class="fa fa-angle-left"></i></a>
+  <a id="nextbutton" href="#"><i class="fa fa-angle-right"></i></a>
+  
+  <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div>
+  
+</div>
+
+
+
+</div>
+
+<div class="text-center">
+
+      <canvas id="the-canvas"></canvas>
+	   <div id="page-loader2">Loading page ...</div>
+	  </div>
+	  
+	  </div>
+	  
+      <script id="script">
+         var pageNum = 1;
+         var pdfScale = 1; // make pdfScale a global variable
+         var shownPdf; // another global we'll use for the buttons
+		 
+         function renderPage(page) {
+            var scale = pdfScale; // render with global pdfScale variable
+            var viewport = page.getViewport(scale);
+            var canvas = document.getElementById('the-canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+               canvasContext: context,
+               viewport: viewport
+            };
+            page.render(renderContext);
+			
+            $("#maincontents").show();
+            
+			$("#nextprevId").show();
+			$("#the-canvas").show();
+	        $("#page-loader").hide();
+	        $("#page-loader2").hide();
+			
+			$(".pdf-header").show();
+			
+			$("#pdf-current-page").text(pageNum);
+			
+         }
+
+         function displayPage(pdf, num) {
+            pdf.getPage(num).then(function getPage(page) { renderPage(page); });
+         }
+
+		 function showPDF(url) {
+		 
+		 // Disable Prev & Next buttons while page is being loaded
+	     
+		 $("#nextprevId").hide();
+		 
+		 // While page is being rendered hide the canvas and show a loading message
+	       $("#the-canvas").hide();
+	       $("#page-loader").show();
+		   $(".pdf-header").hide();
+		 
+		 var pdfDoc = PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
+            displayPage(pdf, 1);
+            shownPdf = pdf;
+			
+			var TOTAL_PAGES = pdf.numPages;
+			$("#pdf-total-pages").text(TOTAL_PAGES);
+			
+         }).catch(function(error) {
+		// If error re-show the upload button
+		$(".pdf-header").hide();
+		$("#page-loader").show();
+		alert(error.message);
+	});;
+		 
+		 }
+		 
+         
+
+         var nextbutton = document.getElementById("nextbutton");
+         nextbutton.onclick = function() {
+            if (pageNum >= shownPdf.numPages) {
+               return;
+            }
+            pageNum++;
+            displayPage(shownPdf, pageNum);
+         }
+
+         var prevbutton = document.getElementById("prevbutton");
+         prevbutton.onclick = function() {
+            if (pageNum <= 1) {
+               return;
+            }
+            pageNum--;
+            displayPage(shownPdf, pageNum);
+         }
+
+         var zoominbutton = document.getElementById("zoominbutton");
+         zoominbutton.onclick = function() {
+            pdfScale = pdfScale + 0.25;
+            displayPage(shownPdf, pageNum);
+         }
+
+         var zoomoutbutton = document.getElementById("zoomoutbutton");
+         zoomoutbutton.onclick = function() {
+            if (pdfScale <= 0.25) {
+               return;
+            }
+            pdfScale = pdfScale - 0.25;
+            displayPage(shownPdf, pageNum);
+         }
+
+
+      </script>
+
+
+   </body>
+</html>

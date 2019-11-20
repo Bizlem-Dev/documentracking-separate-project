@@ -262,22 +262,22 @@
                 </div>
             </div>
             <div class="row content">
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                     <input type="text" name="" class="form-control" placeholder="Recipient email address">
                 </div>
                 <div class="col-md-12">
                     <input type="text" name="" class="form-control" placeholder="Company">
-                </div>
+                </div> -->
                 <div class="col-md-12" style="margin-top:20px;">
                     <strong class="option-text">Options</strong>
                 </div>
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                     <label class="switch">
                         <input type="checkbox">
                         <span class="slider round"></span>
                     </label>
                     <label class="checkbox-label">Send an email to recipient</label>
-                </div>
+                </div> 
                 <div class="col-md-12">
                     <label class="switch">
                         <input type="checkbox">
@@ -291,30 +291,38 @@
                         <span class="slider round"></span>
                     </label>
                     <label class="checkbox-label">Forward tracking</label>
+                </div>-->
+                
+                <div class="col-md-12">
+                    <label class="switch">
+                        <input type="checkbox" id="SU">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label">Single Use</label>
                 </div>
                 
                 <div class="col-md-12">
                     <label class="switch" id="date">
-                        <input type="checkbox">
+                        <input type="checkbox" id="SED">
                         <span class="slider round"></span>
                     </label>
                     <label class="checkbox-label" id="Set expiration date">Set expiration date</label>
-                    <p> click here: <input type="text" id="datepicker"></p>
+                    <p id="datepick" style="display: none;">Pick Date: <input type="text" id="datepicker"></p>
                 </div>
                 
                 
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                     <label class="switch">
                         <input type="checkbox">
                         <span class="slider round"></span>
                     </label>
                     <label class="checkbox-label">Alert if not viewed for daya</label>
-                </div>
+                </div> -->
             </div>
             <div class="row footer-sidebox">
                 <div class="col-md-12 text-right">
                     <a class="btn btn-danger btn-sm close-side text-white">CLOSE</a>
-                    <a class="btn btn-primary btn-sm text-white" onclick="setAlertAnyOneIfNeeded();">CREATE LINK</a>
+                    <a class="btn btn-primary btn-sm text-white create-link">CREATE LINK</a>
                 </div>
             </div>
         </div>

@@ -4,5 +4,6 @@ encoding//src/main/resources=UTF-8
 encoding//src/main/resources/SLING-INF/apps/DoctigerNewUICSSAndJS/common/payments.esp=UTF-8
 encoding//src/main/resources/SLING-INF/apps/DoctigerNewUICSSAndJS/common/profile.esp=UTF-8
 encoding//src/main/resources/SLING-INF/apps/DoctigerNewUICSSAndJS/common/saved-messages.esp=UTF-8
+encoding//src/main/resources/SLING-INF/apps/static/PdfJs.esp=UTF-8
 encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8
